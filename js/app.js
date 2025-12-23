@@ -1,17 +1,4 @@
-/* Navigation Toggle */
-const navToggle = document.querySelector('.nav__toggle');
-const nav = document.querySelector('.nav');
-if (navToggle) {
-  navToggle.addEventListener('click', () => {
-    nav.classList.toggle('nav--open');
-  });
-}
-
-document.querySelectorAll('.nav__links a').forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('nav--open');
-  });
-});
+/* Clean JS - No Toggle Listener */
 
 /* Snow Melt Logic */
 function meltSnow(element) {
