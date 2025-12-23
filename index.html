@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merry Christmas Neelam Ma'am 🎄</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
+  <header class="hero" id="top">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="nav__brand">For Neelam Ma'am</div>
+      <button class="nav__toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links">
+        <li><a href="#top">Home</a></li>
+        <li><a href="#message">Message</a></li>
+        <li><a href="#memories">Memories</a></li>
+        <li><a href="#letters">Letters</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero__content" aria-labelledby="hero-title">
+      <div class="hero__text">
+        <p class="hero__tag">A special Christmas page</p>
+        <h1 class="hero__title" id="hero-title">
+          Merry Christmas,<br />
+          <span class="hero__title--accent">Neelam Ma'am</span>
+        </h1>
+        <p class="hero__subtitle">
+          From your old student <span class="accent">Vishwa Panchal</span>, with gratitude for every lesson, every correction, and every kind word.
+        </p>
+        <div class="hero__actions">
+          <a href="#message" class="btn btn--primary">Open my heartfelt wish</a>
+          <a href="#memories" class="btn btn--ghost">Scroll through memories</a>
+        </div>
+      </div>
+      <div class="hero__card" aria-hidden="true">
+        <div class="gift-card">
+          <div class="gift-card__bow"></div>
+          <div class="gift-card__body">
+            <p>To: Neelam Ma'am</p>
+            <p>From: Vishwa</p>
+            <p class="gift-card__note">With love, respect &amp; warm wishes this Christmas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-indicator__mouse">
+        <div class="scroll-indicator__wheel"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Main message -->
+    <section class="section section--alt" id="message" aria-labelledby="message-title">
+      <div class="section__inner">
+        <h2 class="section__title" id="message-title">A message from Vishwa</h2>
+        <p class="section__subtitle">
+          One English teacher. Many lives changed. This is a small page, but it carries a huge thank you.
+        </p>
+
+        <article class="message-card">
+          <h3 class="message-card__heading">Dear Neelam Ma'am,</h3>
+          <p>
+            As Christmas lights glow everywhere, one light that has stayed constant for me is the one you lit years ago in your English class – the light of expression, clarity, and confidence.
+          </p>
+          <p>
+            You didn’t just correct my grammar; you shaped the way I think, speak, and write. Every time I draft an email, present an idea, or search for the right words, I silently thank you.
+          </p>
+          <p>
+            On this Christmas, I want you to know that your lessons are still alive in my life, travelling with me into every new chapter.
+          </p>
+          <p class="message-card__closing">
+            Wishing you a peaceful, joyful, and beautifully written Christmas season.<br />
+            With deep gratitude,<br />
+            <span class="accent">Your old student, Vishwa Panchal</span>
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Memories -->
+    <section class="section" id="memories" aria-labelledby="memories-title">
+      <div class="section__inner">
+        <h2 class="section__title" id="memories-title">Little classroom memories</h2>
+        <p class="section__subtitle">
+          A few moments that still feel fresh, like ink that never dries.
+        </p>
+
+        <div class="memories-grid">
+          <article class="memory-card">
+            <div class="memory-card__badge">01</div>
+            <h3>Your patient corrections</h3>
+            <p>
+              Every red mark in my notebook felt strict then, but now it feels like care. You took time to polish each sentence until it truly shone.
+            </p>
+          </article>
+
+          <article class="memory-card">
+            <div class="memory-card__badge">02</div>
+            <h3>Confidence to speak</h3>
+            <p>
+              Standing up to read aloud or present was scary, but your calm smile from the last bench gave me the courage to finish every line.
+            </p>
+          </article>
+
+          <article class="memory-card">
+            <div class="memory-card__badge">03</div>
+            <h3>Love for the language</h3>
+            <p>
+              You turned English from a subject into a language I genuinely enjoy – something that supports me every single day, even in engineering.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive letters -->
+    <section class="section section--alt" id="letters" aria-labelledby="letters-title">
+      <div class="section__inner">
+        <h2 class="section__title" id="letters-title">Open these little Christmas notes</h2>
+        <p class="section__subtitle">
+          Tap on each envelope to open a small part of my gratitude.
+        </p>
+
+        <div class="letters-grid" role="list">
+          <button class="letter" data-letter="1" role="listitem">
+            <div class="letter__envelope">
+              <div class="letter__flap"></div>
+              <div class="letter__seal">🎄</div>
+            </div>
+            <p class="letter__label">For your guidance</p>
+          </button>
+
+          <button class="letter" data-letter="2" role="listitem">
+            <div class="letter__envelope">
+              <div class="letter__flap"></div>
+              <div class="letter__seal">⭐</div>
+            </div>
+            <p class="letter__label">For your patience</p>
+          </button>
+
+          <button class="letter" data-letter="3" role="listitem">
+            <div class="letter__envelope">
+              <div class="letter__flap"></div>
+              <div class="letter__seal">❤️</div>
+            </div>
+            <p class="letter__label">For your blessings</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal for letters -->
+    <div class="modal" id="letterModal" aria-hidden="true">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div
+        class="modal__content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+        aria-describedby="modalBody"
+      >
+        <button class="modal__close" type="button" aria-label="Close" data-close-modal>&times;</button>
+        <h3 id="modalTitle" class="modal__title"></h3>
+        <p id="modalBody" class="modal__body"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Crafted with care by <span class="accent">Vishwa Panchal</span> exclusively for
+      <span class="accent">Neelam Ma'am</span>.
+    </p>
+    <p class="footer__mini">May your days be merry, bright, and always full of wonderful words.</p>
+  </footer>
+
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
