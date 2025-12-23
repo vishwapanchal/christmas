@@ -1,221 +1,135 @@
-/* Mobile nav toggle */
-const nav = document.querySelector('.nav');
+/* Navigation Toggle */
 const navToggle = document.querySelector('.nav__toggle');
-const navLinks = document.querySelectorAll('.nav__links a');
-
+const nav = document.querySelector('.nav');
 if (navToggle) {
   navToggle.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('nav--open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
+    nav.classList.toggle('nav--open');
   });
 }
 
-navLinks.forEach(link => {
+document.querySelectorAll('.nav__links a').forEach(link => {
   link.addEventListener('click', () => {
     nav.classList.remove('nav--open');
-    navToggle.setAttribute('aria-expanded', 'false');
   });
 });
 
-/* Smooth scroll */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const targetId = a.getAttribute('href').substring(1);
-    const targetEl = document.getElementById(targetId);
-    if (!targetEl) return;
-    e.preventDefault();
-    const top = targetEl.getBoundingClientRect().top + window.scrollY - 72;
-    window.scrollTo({ top, behavior: 'smooth' });
+/* Snow Melt Logic */
+function meltSnow(element) {
+  element.classList.add('melted');
+}
+window.meltSnow = meltSnow;
+
+/* Gift Box Interaction */
+const giftAxis = document.querySelector('.gift-3d-axis');
+const giftContainer = document.querySelector('.gift-3d-wrapper');
+
+if (giftAxis && giftContainer) {
+  giftContainer.addEventListener('mousemove', (e) => {
+    const rect = giftContainer.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Calculate rotation
+    const xRot = -20 - ((mouseY - rect.height/2) / 5);
+    const yRot = (mouseX - rect.width/2) / 5;
+    
+    giftAxis.style.animation = 'none';
+    giftAxis.style.transform = `rotateX(${xRot}deg) rotateY(${yRot}deg)`;
   });
-});
 
-/* Modal letters content */
-const letterData = {
-  1: {
-    title: 'For your guidance',
-    body:
-      'Every chapter you taught felt clear, not because the syllabus was easy, but because you made it meaningful. ' +
-      'Your guidance still shapes how I present my ideas and communicate with people today.'
-  },
-  2: {
-    title: 'For your patience',
-    body:
-      'You never rushed through doubts or questions, even when the class was noisy or distracted. ' +
-      'That quiet patience taught me that true teaching is not about finishing the lesson, but about reaching the student.'
-  },
-  3: {
-    title: 'For your blessings',
-    body:
-      'Years may pass and cities may change, but the blessings of a teacher travel silently with their students. ' +
-      'Whenever something goes right for me, a part of the credit always belongs to you.'
-  }
-};
-
-const modal = document.getElementById('letterModal');
-const modalTitle = modal?.querySelector('.modal__title');
-const modalBody = modal?.querySelector('.modal__body');
-const closeTargets = modal?.querySelectorAll('[data-close-modal]');
-let lastFocusedElement = null;
-
-function openModal(key) {
-  if (!modal || !letterData[key]) return;
-  modalTitle.textContent = letterData[key].title;
-  modalBody.textContent = letterData[key].body;
-  lastFocusedElement = document.activeElement;
-  modal.classList.add('modal--open');
-  modal.setAttribute('aria-hidden', 'false');
-  modal.querySelector('.modal__close')?.focus();
+  giftContainer.addEventListener('mouseleave', () => {
+    giftAxis.style.animation = 'spinBox 8s linear infinite';
+  });
 }
 
-function closeModal() {
-  if (!modal) return;
-  modal.classList.remove('modal--open');
-  modal.setAttribute('aria-hidden', 'true');
-  if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-    lastFocusedElement.focus();
-  }
-}
-
-document.querySelectorAll('.letter').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const key = btn.getAttribute('data-letter');
-    openModal(key);
-  });
-});
-
-closeTargets?.forEach(el => {
-  el.addEventListener('click', closeModal);
-});
-
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
-
-/* Snow animation (lightweight for mobile) */
-(function snow() {
+/* Snow Animation */
+(function() {
   const canvas = document.getElementById('snow-canvas');
-  if (!canvas) return;
+  if(!canvas) return;
   const ctx = canvas.getContext('2d');
-
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-
+  
+  let width, height;
   const flakes = [];
-  const FLAKE_COUNT = width < 768 ? 90 : 160;
-
-  function createFlake() {
-    const size = Math.random() * 2.2 + 0.5;
-    return {
+  
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  
+  window.addEventListener('resize', resize);
+  resize();
+  
+  for(let i=0; i<100; i++) {
+    flakes.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: size,
-      speed: size * 0.35 + 0.2,
-      drift: (Math.random() - 0.5) * 0.6
-    };
+      r: Math.random() * 2 + 1,
+      d: Math.random() * 1 + 0.5
+    });
   }
-
-  for (let i = 0; i < FLAKE_COUNT; i++) {
-    flakes.push(createFlake());
-  }
-
+  
   function draw() {
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(248, 250, 252, 0.85)';
+    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
     ctx.beginPath();
-
-    for (const flake of flakes) {
-      ctx.moveTo(flake.x, flake.y);
-      ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+    for(let i=0; i<flakes.length; i++) {
+      const f = flakes[i];
+      ctx.moveTo(f.x, f.y);
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI*2, true);
     }
     ctx.fill();
     update();
     requestAnimationFrame(draw);
   }
-
+  
   function update() {
-    for (const flake of flakes) {
-      flake.y += flake.speed;
-      flake.x += flake.drift;
-
-      if (flake.y > height + 5) {
-        flake.y = -10;
-        flake.x = Math.random() * width;
+    for(let i=0; i<flakes.length; i++) {
+      const f = flakes[i];
+      f.y += Math.pow(f.d, 2) + 0.5;
+      f.x += Math.sin(f.y * 0.01) * 0.5;
+      
+      if(f.y > height) {
+        flakes[i] = {x: Math.random() * width, y: 0, r: f.r, d: f.d};
       }
-      if (flake.x > width + 5) flake.x = -5;
-      if (flake.x < -5) flake.x = width + 5;
     }
   }
-
-  window.addEventListener('resize', () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  });
-
+  
   draw();
 })();
 
-/* GSAP animations */
-if (window.gsap) {
+/* GSAP Animations */
+if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 
-  gsap.from('.hero__text', {
-    y: 30,
-    opacity: 0,
-    duration: 0.9,
-    ease: 'power3.out'
+  gsap.from(".gift-3d-wrapper", {
+    scale: 0, opacity: 0, duration: 1.5, ease: "back.out(1.5)"
   });
 
-  gsap.from('.hero__card', {
-    y: 40,
-    opacity: 0,
-    duration: 1,
-    delay: 0.1,
-    ease: 'back.out(1.3)'
+  gsap.from(".hero__text-content > *", {
+    y: 30, opacity: 0, duration: 1.2, ease: "power3.out", stagger: 0.2, delay: 0.5
   });
 
-  gsap.utils.toArray('.section').forEach(section => {
-    const inner = section.querySelector('.section__inner');
-    if (!inner) return;
-    gsap.from(inner, {
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 80%',
-        toggleActions: 'play none none reverse'
-      },
-      y: 40,
-      opacity: 0,
-      duration: 0.7,
-      ease: 'power2.out'
+  gsap.from(".gift-card", {
+    rotationY: 0, rotationX: 0, y: -50, opacity: 0, 
+    duration: 2, ease: "elastic.out(1, 0.5)", delay: 0.8
+  });
+
+  gsap.utils.toArray(".section__title").forEach(title => {
+    gsap.from(title, {
+      scrollTrigger: { trigger: title, start: "top 80%" },
+      y: 30, opacity: 0, duration: 1
     });
   });
 
-  const memories = document.querySelectorAll('.memory-card');
-  if (memories.length) {
-    gsap.from(memories, {
-      scrollTrigger: {
-        trigger: '#memories',
-        start: 'top 75%'
-      },
-      y: 30,
-      opacity: 0,
-      duration: 0.7,
-      ease: 'power2.out',
-      stagger: 0.12
-    });
-  }
+  gsap.from(".memories-grid .memory-card", {
+    scrollTrigger: { trigger: ".memories-grid", start: "top 80%" },
+    y: 40, opacity: 0, stagger: 0.2, duration: 0.8
+  });
 
-  const letters = document.querySelectorAll('.letter__envelope');
-  letters.forEach((env, i) => {
-    gsap.to(env, {
-      y: -8,
-      duration: 1.8 + i * 0.2,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut'
-    });
+  gsap.from(".snow-cards-container .snow-card", {
+    scrollTrigger: { trigger: ".snow-cards-container", start: "top 80%" },
+    scale: 0.8, opacity: 0, stagger: 0.2, duration: 0.8, ease: "back.out(1.7)"
   });
 }
