@@ -1,4 +1,4 @@
-/* Clean JS - No Toggle Listener */
+/* Clean JS */
 
 /* Snow Melt Logic */
 function meltSnow(element) {
@@ -121,7 +121,7 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 
-/* Background Music Logic (Mobile Optimized) */
+/* Background Music Logic */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
   let hasStarted = false;
@@ -129,27 +129,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const playAudio = () => {
     if (hasStarted || !music) return;
     
-    // Attempt play
+    // Attempt play immediately
     music.play().then(() => {
       hasStarted = true;
-      // If successful, remove all listeners
+      // If successful, we don't need listeners anymore
       ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
         document.removeEventListener(evt, playAudio)
       );
     }).catch(err => {
-      // Autoplay blocked - will wait for next interaction
+      // If blocked by browser, we MUST keep these listeners active
+      // as a fallback, otherwise the song will NEVER play.
     });
   };
 
-  // 1. Try immediately on load
+  // 1. Try immediately on load (Desktop might allow this)
   playAudio();
 
-  // 2. Listen for ANY interaction (Touch is fastest on Android)
+  // 2. Fallback: Try on ANY interaction (This is required for Mobile)
   ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
     document.addEventListener(evt, playAudio, { once: true })
   );
 
-  // 3. Pause when hidden, Resume when active (only if it has started)
+  // 3. Pause when hidden, Resume when active (but only if started)
   document.addEventListener('visibilitychange', () => {
     if (!music) return;
     if (document.hidden) {
