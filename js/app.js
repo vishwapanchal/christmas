@@ -121,7 +121,7 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 
-/* Background Music Logic */
+/* Background Music Logic (SLIDE/SCROLL Only) */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
   let hasStarted = false;
@@ -132,25 +132,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attempt play immediately
     music.play().then(() => {
       hasStarted = true;
-      // If successful, we don't need listeners anymore
-      ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
+      // Remove listeners if successful
+      ['scroll', 'touchmove', 'wheel'].forEach(evt => 
         document.removeEventListener(evt, playAudio)
       );
     }).catch(err => {
-      // If blocked by browser, we MUST keep these listeners active
-      // as a fallback, otherwise the song will NEVER play.
+      // If blocked, keep waiting for slide/scroll
     });
   };
 
-  // 1. Try immediately on load (Desktop might allow this)
+  // 1. Try immediately (Best effort)
   playAudio();
 
-  // 2. Fallback: Try on ANY interaction (This is required for Mobile)
-  ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
+  // 2. Triggers: SCROLL, TOUCHMOVE (Slide), WHEEL
+  // Removed: click, touchstart
+  ['scroll', 'touchmove', 'wheel'].forEach(evt => 
     document.addEventListener(evt, playAudio, { once: true })
   );
 
-  // 3. Pause when hidden, Resume when active (but only if started)
+  // 3. Pause when hidden, Resume when active
   document.addEventListener('visibilitychange', () => {
     if (!music) return;
     if (document.hidden) {
