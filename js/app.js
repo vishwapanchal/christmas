@@ -121,31 +121,56 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 
-/* Background Music Logic (SLIDE/SCROLL Only) */
+/* Background Music Logic */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-toggle');
   let hasStarted = false;
 
+  // Update button visual state
+  const updateBtn = () => {
+    if (!music.paused) {
+      btn.classList.add('playing');
+    } else {
+      btn.classList.remove('playing');
+    }
+  };
+
+  // Toggle Function (Manual Click)
+  if (btn) {
+    btn.addEventListener('click', () => {
+      if (music.paused) {
+        music.play().then(() => {
+          hasStarted = true;
+          updateBtn();
+        }).catch(e => console.error(e));
+      } else {
+        music.pause();
+        updateBtn();
+      }
+    });
+  }
+
+  // Attempt Autoplay / Slide-to-play
   const playAudio = () => {
     if (hasStarted || !music) return;
     
-    // Attempt play immediately
     music.play().then(() => {
       hasStarted = true;
-      // Remove listeners if successful
+      updateBtn(); // Update button to show it started
+      // Remove triggers if successful
       ['scroll', 'touchmove', 'wheel'].forEach(evt => 
         document.removeEventListener(evt, playAudio)
       );
     }).catch(err => {
-      // If blocked, keep waiting for slide/scroll
+      // Waiting for interaction
     });
   };
 
-  // 1. Try immediately (Best effort)
+  // 1. Try immediately
   playAudio();
 
   // 2. Triggers: SCROLL, TOUCHMOVE (Slide), WHEEL
-  // Removed: click, touchstart
   ['scroll', 'touchmove', 'wheel'].forEach(evt => 
     document.addEventListener(evt, playAudio, { once: true })
   );
@@ -155,8 +180,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!music) return;
     if (document.hidden) {
       music.pause();
+      updateBtn();
     } else {
-      if (hasStarted) music.play().catch(()=>{});
+      // Only resume if it was already playing before we left, 
+      // OR if we want it to resume automatically.
+      // Usually better to let user manually resume if they paused it,
+      // but here we resume if it 'hasStarted'.
+      if (hasStarted) {
+        music.play().catch(()=>{});
+        updateBtn();
+      }
     }
   });
+
+  // Listen to standard play/pause events in case browser stops it
+  if (music) {
+    music.addEventListener('play', updateBtn);
+    music.addEventListener('pause', updateBtn);
+  }
 });
