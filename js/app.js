@@ -121,41 +121,41 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 
-/* Background Music Logic (No Button, Auto-pause on Tab Switch) */
+/* Background Music Logic (Aggressive Start) */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
   let hasStarted = false;
 
-  // Function to try playing the music
-  const startMusic = () => {
-    if (!hasStarted && music) {
-      music.play().then(() => {
-        hasStarted = true;
-        // Remove listeners after success so we don't keep trying
-        document.removeEventListener('click', startMusic);
-        document.removeEventListener('scroll', startMusic);
-      }).catch((err) => {
-        console.log("Autoplay blocked, waiting for interaction...");
-      });
-    }
+  const playAudio = () => {
+    if (hasStarted || !music) return;
+    
+    music.play().then(() => {
+      hasStarted = true;
+      // Remove all listener types once successful
+      ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
+        document.removeEventListener(evt, playAudio)
+      );
+    }).catch(err => {
+      // Browser blocked it, keep waiting for interaction
+      // console.log("Auto-play blocked, waiting for input");
+    });
   };
 
-  // 1. Start music on first user interaction (Click or Scroll)
-  document.addEventListener('click', startMusic);
-  document.addEventListener('scroll', startMusic);
+  // 1. Try immediately on load (works in some browsers)
+  playAudio();
 
-  // 2. Handle Tab Switching (Stop when hidden, Resume when visible)
+  // 2. Try on ANY user interaction (Click, Scroll, MouseMove, KeyPress)
+  ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
+    document.addEventListener(evt, playAudio, { once: true })
+  );
+
+  // 3. Pause when leaving tab, Resume when returning (but only if it started)
   document.addEventListener('visibilitychange', () => {
     if (!music) return;
-    
     if (document.hidden) {
-      // User left the tab -> Pause
       music.pause();
     } else {
-      // User returned -> Play (ONLY if it had already started)
-      if (hasStarted) {
-        music.play().catch(e => console.log("Resume error:", e));
-      }
+      if (hasStarted) music.play().catch(()=>{});
     }
   });
 });
