@@ -121,7 +121,7 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 
-/* Background Music Logic (Aggressive Start) */
+/* Background Music Logic (Mobile Optimized) */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
   let hasStarted = false;
@@ -129,27 +129,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const playAudio = () => {
     if (hasStarted || !music) return;
     
+    // Attempt play
     music.play().then(() => {
       hasStarted = true;
-      // Remove all listener types once successful
+      // If successful, remove all listeners
       ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
         document.removeEventListener(evt, playAudio)
       );
     }).catch(err => {
-      // Browser blocked it, keep waiting for interaction
-      // console.log("Auto-play blocked, waiting for input");
+      // Autoplay blocked - will wait for next interaction
     });
   };
 
-  // 1. Try immediately on load (works in some browsers)
+  // 1. Try immediately on load
   playAudio();
 
-  // 2. Try on ANY user interaction (Click, Scroll, MouseMove, KeyPress)
+  // 2. Listen for ANY interaction (Touch is fastest on Android)
   ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(evt => 
     document.addEventListener(evt, playAudio, { once: true })
   );
 
-  // 3. Pause when leaving tab, Resume when returning (but only if it started)
+  // 3. Pause when hidden, Resume when active (only if it has started)
   document.addEventListener('visibilitychange', () => {
     if (!music) return;
     if (document.hidden) {
