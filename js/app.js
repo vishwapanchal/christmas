@@ -119,4 +119,42 @@ if (window.gsap && window.ScrollTrigger) {
     scrollTrigger: { trigger: ".snow-cards-container", start: "top 80%" },
     scale: 0.8, opacity: 0, stagger: 0.2, duration: 0.8, ease: "back.out(1.7)"
   });
+  /* Background Music Logic (No Button) */
+document.addEventListener('DOMContentLoaded', () => {
+  const music = document.getElementById('bg-music');
+  let hasStarted = false;
+
+  // Function to try playing the music
+  const startMusic = () => {
+    if (!hasStarted && music) {
+      music.play().then(() => {
+        hasStarted = true;
+        // Remove listeners after success so we don't keep trying
+        document.removeEventListener('click', startMusic);
+        document.removeEventListener('scroll', startMusic);
+      }).catch((err) => {
+        console.log("Autoplay blocked, waiting for interaction...");
+      });
+    }
+  };
+
+  // 1. Start music on first user interaction (Click or Scroll)
+  document.addEventListener('click', startMusic);
+  document.addEventListener('scroll', startMusic);
+
+  // 2. Handle Tab Switching (Stop when hidden, Resume when visible)
+  document.addEventListener('visibilitychange', () => {
+    if (!music) return;
+    
+    if (document.hidden) {
+      // User left the tab -> Pause
+      music.pause();
+    } else {
+      // User returned -> Play (ONLY if it had already started)
+      if (hasStarted) {
+        music.play().catch(e => console.log("Resume error:", e));
+      }
+    }
+  });
+});
 }
