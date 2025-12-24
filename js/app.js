@@ -119,7 +119,9 @@ if (window.gsap && window.ScrollTrigger) {
     scrollTrigger: { trigger: ".snow-cards-container", start: "top 80%" },
     scale: 0.8, opacity: 0, stagger: 0.2, duration: 0.8, ease: "back.out(1.7)"
   });
-  /* Background Music Logic (No Button) */
+}
+
+/* Background Music Logic (No Button, Auto-pause on Tab Switch) */
 document.addEventListener('DOMContentLoaded', () => {
   const music = document.getElementById('bg-music');
   let hasStarted = false;
@@ -157,4 +159,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-}
